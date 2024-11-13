@@ -53,14 +53,23 @@ OmegaStatus OmegaESP32xxNVSController_write_int(const char *key, const int value
 {
     OmegaStatus status = eFAILED;
     nvs_handle_t nvs_handle;
-    if (ESP_OK != nvs_open("storage", NVS_READWRITE, &nvs_handle))
+    if (ESP_OK != nvs_open("storage", NVS_READWRITE, &nvs_handle)){
+        OMEGA_LOGE("nvs_open failed for key: %s", key);
         goto ret;
+    }
     if (ESP_OK != nvs_set_i64(nvs_handle, key, value))
-        goto ret;
+    {
+        OMEGA_LOGE("nvs_set_i64 failed for key: %s", key);
+        goto nvs_close;
+    }
     if (ESP_OK != nvs_commit(nvs_handle))
-        goto ret;
-    nvs_close(nvs_handle);
+    {
+        OMEGA_LOGE("nvs_commit failed for key: %s", key);
+        goto nvs_close;
+    }
     status = eSUCCESS;
+nvs_close:
+    nvs_close(nvs_handle);
     OMEGA_LOGD("key: %s value: %d",key, value);
 ret:
     return status;
@@ -90,7 +99,7 @@ OmegaStatus OmegaESP32xxNVSController_read_int(const char *key, int *value)
     status = eSUCCESS;
 nvs_close:
     nvs_close(nvs_handle);
-    OMEGA_LOGD("key: %s value: %d",key, *value);
+    OMEGA_LOGD("key: \"%s\" value: %d",key, *value);
 ret:
     return status;
 }
