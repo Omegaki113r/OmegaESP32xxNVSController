@@ -10,7 +10,7 @@
  * File Created: Sunday, 10th November 2024 7:02:51 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Sunday, 10th November 2024 10:03:12 pm
+ * Last Modified: Sunday, 24th November 2024 11:40:29 pm
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -36,7 +36,7 @@ extern "C"
 #include <freertos/semphr.h>
 #include <freertos/task.h>
 
-#include "OmegaUtilityDriver.h"
+#include "OmegaUtilityDriver.hpp"
 
     OmegaStatus OmegaESP32xxNVSController_init();
     OmegaStatus OmegaESP32xxNVSController_write_int(const char *key, const int value);
