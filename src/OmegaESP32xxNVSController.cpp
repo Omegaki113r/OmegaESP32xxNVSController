@@ -53,11 +53,11 @@ OmegaStatus OmegaESP32xxNVSController_write_int(const char *key, const int value
 {
     OmegaStatus status = eFAILED;
     nvs_handle_t nvs_handle;
+    u64 write_value = value;
     if (ESP_OK != nvs_open("storage", NVS_READWRITE, &nvs_handle)){
         OMEGA_LOGE("nvs_open failed for key: %s", key);
         goto ret;
     }
-    u64 write_value = value;
     if (ESP_OK != nvs_set_i64(nvs_handle, key, write_value))
     {
         OMEGA_LOGE("nvs_set_i64 failed for key: %s", key);
@@ -79,17 +79,17 @@ ret:
 OmegaStatus OmegaESP32xxNVSController_read_int(const char *key, int *value)
 {
     OmegaStatus status = eFAILED;
+    nvs_handle_t nvs_handle;
+    i64 read_data = 0;
+    esp_err_t err;
     if(NULL == value){
         OMEGA_LOGE("value provided for key: %s was NULL", key);
         goto ret;
     }
-    nvs_handle_t nvs_handle;
     if (ESP_OK != nvs_open("storage", NVS_READWRITE, &nvs_handle)){
         OMEGA_LOGE("nvs_open failed for key: %s", key);
         goto ret;
     }
-    esp_err_t err;
-    i64 read_data = 0;
     if (ESP_OK != (err = nvs_get_i64(nvs_handle, key, &read_data)))
     {
         if(ESP_ERR_NVS_NOT_FOUND == err && 
@@ -111,9 +111,9 @@ OmegaStatus OmegaESP32xxNVSController_write_float(const char *key, const float v
 {
     OmegaStatus status = eFAILED;
     nvs_handle_t nvs_handle;
+    i64 converted_data = 0;
     if (ESP_OK != nvs_open("storage", NVS_READWRITE, &nvs_handle))
         goto ret;
-    i64 converted_data = 0;
     memcpy(&converted_data, &value, sizeof(float));
     if (ESP_OK != nvs_set_i64(nvs_handle, key, converted_data))
         goto ret;
@@ -130,9 +130,9 @@ OmegaStatus OmegaESP32xxNVSController_read_float(const char *key, float *value)
 {
     OmegaStatus status = eFAILED;
     nvs_handle_t nvs_handle;
+    i64 read_data = 0;
     if (ESP_OK != nvs_open("storage", NVS_READONLY, &nvs_handle))
         goto ret;
-    i64 read_data = 0;
     if (ESP_OK != nvs_get_i64(nvs_handle, key, &read_data))
         goto ret;
     memcpy(value, &read_data, sizeof(i64));
