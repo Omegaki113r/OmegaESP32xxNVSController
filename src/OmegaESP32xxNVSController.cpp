@@ -33,7 +33,7 @@ OmegaStatus OmegaESP32xxNVSController_init(const char *nvs_partition_label)
 {
     OmegaStatus status = eFAILED;
     esp_partition_t *partition;
-    if (NULL != (partition = esp_partition_find_first(ESP_PARTITION_TYPE_DATA, ESP_PARTITION_SUBTYPE_DATA_NVS, nvs_partition_label)))
+    if (NULL != (partition = (esp_partition_t *)esp_partition_find_first(ESP_PARTITION_TYPE_DATA, ESP_PARTITION_SUBTYPE_DATA_NVS, nvs_partition_label)))
     {
         esp_err_t err = nvs_flash_init_partition(partition->label);
         if (ESP_ERR_NVS_NO_FREE_PAGES == err || ESP_ERR_NVS_NEW_VERSION_FOUND == err)
