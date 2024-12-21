@@ -38,7 +38,7 @@ extern "C"
 
 #include "OmegaUtilityDriver.hpp"
 
-    OmegaStatus OmegaESP32xxNVSController_init();
+    OmegaStatus OmegaESP32xxNVSController_init(const char *nvs_partition_label);
     OmegaStatus OmegaESP32xxNVSController_write_int(const char *key, const int value);
     OmegaStatus OmegaESP32xxNVSController_read_int(const char *key, int *value);
     OmegaStatus OmegaESP32xxNVSController_write_float(const char *key, const float value);
