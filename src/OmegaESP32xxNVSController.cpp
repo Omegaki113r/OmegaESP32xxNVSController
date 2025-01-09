@@ -10,7 +10,7 @@
  * File Created: Sunday, 10th November 2024 7:00:27 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Sunday, 10th November 2024 10:07:48 pm
+ * Last Modified: Thursday, 9th January 2025 1:28:04 pm
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -27,37 +27,36 @@
 #include <nvs.h>
 #include <nvs_flash.h>
 
-#include "OmegaESP32xxNVSController.h"
+#include "OmegaESP32xxNVSController.hpp"
 
 OmegaStatus OmegaESP32xxNVSController_init(const char *nvs_partition_label)
 {
     OmegaStatus status = eFAILED;
-    esp_partition_t *partition;
-    if (NULL != (partition = esp_partition_find_first(ESP_PARTITION_TYPE_DATA, ESP_PARTITION_SUBTYPE_DATA_NVS, nvs_partition_label)))
+    if (const auto partition = esp_partition_find_first(ESP_PARTITION_TYPE_DATA, ESP_PARTITION_SUBTYPE_DATA_NVS, nvs_partition_label); nullptr == partition)
     {
         esp_err_t err = nvs_flash_init_partition(partition->label);
         if (ESP_ERR_NVS_NO_FREE_PAGES == err || ESP_ERR_NVS_NEW_VERSION_FOUND == err)
         {
             if (ESP_OK != nvs_flash_erase())
-                goto ret;
+                return eFAILED;
             if (ESP_OK != nvs_flash_init_partition(partition->label))
-                goto ret;
+                return eFAILED;
         }
-        status = eSUCCESS;
+        return eSUCCESS;
     }
-ret:
-    return status;
+    return eFAILED;
 }
 
 OmegaStatus OmegaESP32xxNVSController_write_int(const char *key, const int value)
 {
     OmegaStatus status = eFAILED;
     nvs_handle_t nvs_handle;
-    if (ESP_OK != nvs_open("storage", NVS_READWRITE, &nvs_handle)){
+    u64 write_value = value;
+    if (ESP_OK != nvs_open("storage", NVS_READWRITE, &nvs_handle))
+    {
         OMEGA_LOGE("nvs_open failed for key: %s", key);
         goto ret;
     }
-    u64 write_value = value;
     if (ESP_OK != nvs_set_i64(nvs_handle, key, write_value))
     {
         OMEGA_LOGE("nvs_set_i64 failed for key: %s", key);
@@ -71,7 +70,7 @@ OmegaStatus OmegaESP32xxNVSController_write_int(const char *key, const int value
     status = eSUCCESS;
 nvs_close:
     nvs_close(nvs_handle);
-    OMEGA_LOGD("key: %s value: %d",key, value);
+    OMEGA_LOGD("key: %s value: %d", key, value);
 ret:
     return status;
 }
@@ -79,21 +78,24 @@ ret:
 OmegaStatus OmegaESP32xxNVSController_read_int(const char *key, int *value)
 {
     OmegaStatus status = eFAILED;
-    if(NULL == value){
+    nvs_handle_t nvs_handle;
+    esp_err_t err;
+    i64 read_data = 0;
+    if (NULL == value)
+    {
         OMEGA_LOGE("value provided for key: %s was NULL", key);
         goto ret;
     }
-    nvs_handle_t nvs_handle;
-    if (ESP_OK != nvs_open("storage", NVS_READWRITE, &nvs_handle)){
+    if (ESP_OK != nvs_open("storage", NVS_READWRITE, &nvs_handle))
+    {
         OMEGA_LOGE("nvs_open failed for key: %s", key);
         goto ret;
     }
-    esp_err_t err;
-    i64 read_data = 0;
     if (ESP_OK != (err = nvs_get_i64(nvs_handle, key, &read_data)))
     {
-        if(ESP_ERR_NVS_NOT_FOUND == err && 
-            ESP_OK != (err = nvs_set_i64(nvs_handle, key, 0))){
+        if (ESP_ERR_NVS_NOT_FOUND == err &&
+            ESP_OK != (err = nvs_set_i64(nvs_handle, key, 0)))
+        {
             OMEGA_LOGE("nvs_get_i64 failed for key: %s, err: %s", key, esp_err_to_name(err));
             goto nvs_close;
         }
@@ -102,7 +104,7 @@ OmegaStatus OmegaESP32xxNVSController_read_int(const char *key, int *value)
     status = eSUCCESS;
 nvs_close:
     nvs_close(nvs_handle);
-    OMEGA_LOGD("key: \"%s\" value: %d",key, *value);
+    OMEGA_LOGD("key: \"%s\" value: %d", key, *value);
 ret:
     return status;
 }
@@ -111,9 +113,9 @@ OmegaStatus OmegaESP32xxNVSController_write_float(const char *key, const float v
 {
     OmegaStatus status = eFAILED;
     nvs_handle_t nvs_handle;
+    i64 converted_data = 0;
     if (ESP_OK != nvs_open("storage", NVS_READWRITE, &nvs_handle))
         goto ret;
-    i64 converted_data = 0;
     memcpy(&converted_data, &value, sizeof(float));
     if (ESP_OK != nvs_set_i64(nvs_handle, key, converted_data))
         goto ret;
@@ -121,7 +123,7 @@ OmegaStatus OmegaESP32xxNVSController_write_float(const char *key, const float v
         goto ret;
     nvs_close(nvs_handle);
     status = eSUCCESS;
-    OMEGA_LOGD("key: %s value: %f",key, value);
+    OMEGA_LOGD("key: %s value: %f", key, value);
 ret:
     return status;
 }
@@ -130,15 +132,15 @@ OmegaStatus OmegaESP32xxNVSController_read_float(const char *key, float *value)
 {
     OmegaStatus status = eFAILED;
     nvs_handle_t nvs_handle;
+    i64 read_data = 0;
     if (ESP_OK != nvs_open("storage", NVS_READONLY, &nvs_handle))
         goto ret;
-    i64 read_data = 0;
     if (ESP_OK != nvs_get_i64(nvs_handle, key, &read_data))
         goto ret;
     memcpy(value, &read_data, sizeof(i64));
     nvs_close(nvs_handle);
     status = eSUCCESS;
-    OMEGA_LOGD("key: %s value: %f",key, *value);
+    OMEGA_LOGD("key: %s value: %f", key, *value);
 ret:
     return status;
 }

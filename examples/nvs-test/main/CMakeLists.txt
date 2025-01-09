@@ -1,4 +1,4 @@
-set(SOURCES main.c)
+set(SOURCES main.cpp)
 set(HEADER_DIRS .)
 
 idf_component_register(

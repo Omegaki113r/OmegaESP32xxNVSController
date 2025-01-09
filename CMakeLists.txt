@@ -1,4 +1,4 @@
-set(SOURCES src/OmegaESP32xxNVSController.c)
+set(SOURCES src/OmegaESP32xxNVSController.cpp)
 set(PUBLIC_HEADER_DIRS inc)
 set(PRIVATE_HEADER_DIRS priv/inc)
 

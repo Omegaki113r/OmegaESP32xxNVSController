@@ -10,7 +10,7 @@
  * File Created: Sunday, 10th November 2024 7:02:51 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Sunday, 24th November 2024 11:40:29 pm
+ * Last Modified: Thursday, 9th January 2025 1:30:01 pm
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -20,13 +20,7 @@
  * ----------	---	---------------------------------------------------------
  */
 
-#ifndef __OMEGA_ESP32xx_NVS_CONTROLLER_H__
-#define __OMEGA_ESP32xx_NVS_CONTROLLER_H__
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+#pragma once
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -38,13 +32,8 @@ extern "C"
 
 #include "OmegaUtilityDriver.hpp"
 
-    OmegaStatus OmegaESP32xxNVSController_init();
-    OmegaStatus OmegaESP32xxNVSController_write_int(const char *key, const int value);
-    OmegaStatus OmegaESP32xxNVSController_read_int(const char *key, int *value);
-    OmegaStatus OmegaESP32xxNVSController_write_float(const char *key, const float value);
-    OmegaStatus OmegaESP32xxNVSController_read_float(const char *key, float *value);
-#ifdef __cplusplus
-}
-#endif
-
-#endif
+OmegaStatus OmegaESP32xxNVSController_init(const char *);
+OmegaStatus OmegaESP32xxNVSController_write_int(const char *key, const int value);
+OmegaStatus OmegaESP32xxNVSController_read_int(const char *key, int *value);
+OmegaStatus OmegaESP32xxNVSController_write_float(const char *key, const float value);
+OmegaStatus OmegaESP32xxNVSController_read_float(const char *key, float *value);

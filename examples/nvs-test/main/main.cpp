@@ -2,12 +2,12 @@
 
 #include <esp_err.h>
 
-#include "OmegaESP32xxNVSController.h"
-#include "OmegaUtilityDriver.h"
+#include "OmegaESP32xxNVSController.hpp"
+#include "OmegaUtilityDriver.hpp"
 
-void app_main(void)
+extern "C" void app_main(void)
 {
-    if (eSUCCESS != OmegaESP32xxNVSController_init(NULL))
+    if (eSUCCESS != OmegaESP32xxNVSController_init(nullptr))
         OMEGA_LOGE("NVS Controller initialization failed");
     int write = 0;
     int read = 0;
