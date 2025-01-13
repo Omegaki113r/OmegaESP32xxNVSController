@@ -20,13 +20,7 @@
  * ----------	---	---------------------------------------------------------
  */
 
-#ifndef __OMEGA_ESP32xx_NVS_CONTROLLER_H__
-#define __OMEGA_ESP32xx_NVS_CONTROLLER_H__
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+#pragma once
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -43,8 +37,3 @@ extern "C"
     OmegaStatus OmegaESP32xxNVSController_read_int(const char *key, int *value);
     OmegaStatus OmegaESP32xxNVSController_write_float(const char *key, const float value);
     OmegaStatus OmegaESP32xxNVSController_read_float(const char *key, float *value);
-#ifdef __cplusplus
-}
-#endif
-
-#endif
