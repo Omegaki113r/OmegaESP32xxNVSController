@@ -10,7 +10,7 @@
  * File Created: Sunday, 10th November 2024 7:00:27 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Friday, 17th January 2025 1:35:08 am
+ * Last Modified: Saturday, 18th January 2025 10:59:49 pm
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -33,9 +33,25 @@ namespace Omega
 {
     namespace NVS
     {
+        OmegaStatus init()
+        {
+            auto err = nvs_flash_init();
+            if (ESP_ERR_NVS_NO_FREE_PAGES == err || ESP_ERR_NVS_NEW_VERSION_FOUND == err)
+            {
+                if (ESP_OK != nvs_flash_erase())
+                    return eFAILED;
+                if (ESP_OK != nvs_flash_init())
+                    return eFAILED;
+            }
+            else if (ESP_OK == err)
+            {
+                return eSUCCESS;
+            }
+            return eFAILED;
+        }
+
         OmegaStatus init(const char *nvs_partition_label)
         {
-            OmegaStatus status = eFAILED;
             if (const auto partition = esp_partition_find_first(ESP_PARTITION_TYPE_DATA, ESP_PARTITION_SUBTYPE_DATA_NVS, nvs_partition_label); nullptr != partition)
             {
                 esp_err_t err = nvs_flash_init_partition(partition->label);
