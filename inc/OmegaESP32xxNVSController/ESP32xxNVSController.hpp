@@ -10,7 +10,7 @@
  * File Created: Sunday, 10th November 2024 7:02:51 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Saturday, 18th January 2025 10:56:00 pm
+ * Last Modified: Wednesday, 22nd January 2025 10:21:41 pm
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -26,7 +26,7 @@
 #include <stdint.h>
 #include <string>
 
-#include "OmegaUtilityDriver.hpp"
+#include "OmegaUtilityDriver/UtilityDriver.hpp"
 
 namespace Omega
 {
