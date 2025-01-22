@@ -10,7 +10,7 @@
  * File Created: Sunday, 10th November 2024 7:00:27 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Saturday, 18th January 2025 11:02:01 pm
+ * Last Modified: Wednesday, 22nd January 2025 10:23:08 pm
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -27,7 +27,7 @@
 #include <nvs.h>
 #include <nvs_flash.h>
 
-#include "OmegaESP32xxNVSController.hpp"
+#include "OmegaESP32xxNVSController/ESP32xxNVSController.hpp"
 
 namespace Omega
 {
