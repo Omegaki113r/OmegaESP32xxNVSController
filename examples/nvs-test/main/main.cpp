@@ -2,27 +2,31 @@
 
 #include <esp_err.h>
 
-#include "OmegaESP32xxNVSController.hpp"
-#include "OmegaUtilityDriver.hpp"
+#include "OmegaESP32xxNVSController/ESP32xxNVSController.hpp"
+#include "OmegaUtilityDriver/UtilityDriver.hpp"
 
 extern "C" void app_main(void)
 {
     if (eSUCCESS != Omega::NVS::init(nullptr))
         OMEGA_LOGE("NVS Controller initialization failed");
-    int write = 0;
-    int read = 0;
-    float writef = 0;
-    float readf = 0;
+    struct s
+    {
+        int write = 0;
+        int read = 0;
+        float writef = 0;
+        float readf = 0;
+    };
+    s data;
     for (;;)
     {
-        write += 1;
-        writef += 1.0f;
-        Omega::NVS::write_int("data", write);
-        Omega::NVS::read_int("data", &read);
-        OMEGA_LOGI("Write Value: %.2d Read value: %.2d", write, read);
-        Omega::NVS::write_float("dataf", writef);
-        Omega::NVS::read_float("dataf", &readf);
-        OMEGA_LOGI("Write Value: %.2f Read value: %.2f", writef, readf);
+        data.write += 1;
+        data.writef += 1.0f;
+        Omega::NVS::write("data", data.write);
+        Omega::NVS::read("data", &data.read);
+        OMEGA_LOGI("Write Value: %.2d Read value: %.2d", data.write, data.read);
+        Omega::NVS::write("dataf", data.writef);
+        Omega::NVS::read("dataf", &data.readf);
+        OMEGA_LOGI("Write Value: %.2f Read value: %.2f", data.writef, data.readf);
         delay_ms(100);
     }
 }

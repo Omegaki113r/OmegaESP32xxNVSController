@@ -13,6 +13,7 @@
         "omegaesp32xxnvscontroller.h": "c",
         "nvs_flash.h": "c",
         "esp_partition.h": "c",
-        "format": "c"
+        "format": "c",
+        "*.tcc": "cpp"
     }
 }
